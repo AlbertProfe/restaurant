@@ -6,6 +6,7 @@ import org.example.model.Table;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 
 public class App 
@@ -13,6 +14,18 @@ public class App
     public static void main( String[] args )
     {
 
+        System.out.println("\nInit");
+
+        sandboxCreateObjects();
+
+        //O1.calculateIVA();
+
+        System.out.println("\nfinish");
+
+
+    }
+
+    public static void sandboxCreateObjects (){
 
         Table t1 = new Table("Table 01", "Table type Modern", 4, false);
         Table t2 = new Table();
@@ -27,10 +40,14 @@ public class App
         m2.setActive(true);
         m2.setPrice(8.5);
 
+
+
         Menu m3 = new Menu();
         Menu m4 = new Menu();
 
         Order o1 = new Order(new Date(), "Jazz", 20, 200.0, false, t1, null);
+
+        System.out.println("IVA O1:" + o1.calculateIVA());
 
         ArrayList<Menu> m = new ArrayList<>();
         m.add(m1);
@@ -42,11 +59,23 @@ public class App
         Order o2 = new Order(new Date(), "Toni", 3, 0.0, false,
                 new Table("Table 01", "Table type Modern", 4, false) ,m);
 
+        o2.setMenus(m);
+
+        //double iva = o2.calculateIVA();
+        o2.calculateTotalPayment();
 
         System.out.printf("table from o2: " +  o2.getTable() );
 
 
-        System.out.println("\nHello world!");
+
+
+
+        HashMap<String, Menu> menus = new HashMap<String, Menu>();
+
+        menus.put("M101", m1);
+
 
     }
+
+
 }
