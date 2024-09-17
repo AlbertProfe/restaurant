@@ -35,7 +35,7 @@ public class App
         Menu m2 = new Menu("Menu Vegan", 10.5, "", true, true);
         Menu m3 = new Menu("Menu Kids", 12.5, "", true, true);
        // save to HashMap ...
-        // useful comment 
+        // useful comment
 
 
         ArrayList<Menu> m = new ArrayList<>();
