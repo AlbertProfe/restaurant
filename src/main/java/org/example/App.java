@@ -41,7 +41,9 @@ public class App
         m.add(m1);
         m.add(m1);
         m.add(m2);
-        m.add(m3);;
+        m.add(m3);
+        m.add(m3);
+        //add a menu by Enrique
 
 
         Order o1 = new Order(new Date(), "Jazz", 20, 0.0, false, t1, null);
