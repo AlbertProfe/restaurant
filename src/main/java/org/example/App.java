@@ -3,6 +3,7 @@ package org.example;
 import org.example.model.Menu;
 import org.example.model.Order;
 import org.example.model.Table;
+import org.example.repository.RestaurantDB;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,7 +16,11 @@ public class App
     {
         System.out.println("\nInit");
 
-        //create RestaurantDB r1;
+        //create RestaurantDB r1; Done.
+        RestaurantDB r1 = new RestaurantDB();
+        /*
+        * Although We need to create the hashmaps objects that will be binding r1 hashmaps properties.
+        * */
         sandboxCreateObjects();
         //o1.calculateIVA();
         System.out.println("\nFinish");
