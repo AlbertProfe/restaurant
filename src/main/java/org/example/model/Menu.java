@@ -15,7 +15,5 @@ public class Menu {
     private boolean active;
     private boolean water;
 
-
-
-    }
+}
 

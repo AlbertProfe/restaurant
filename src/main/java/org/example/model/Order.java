@@ -22,23 +22,36 @@ public class Order {
 
     public double calculateTotalPayment (){
 
-        // WHAT? Calculate the amount to pay with IVA
+        // WHAT
+        // Calculate the amount to pay with IVA
 
-        //o2.getMenus()
-        //get all bojects from the array and sum up
-        //calculate IVA
+        //HOW
+        double totalPyment = 0.0;
+        for (Menu m : this.getMenus()) {
+            totalPyment = totalPyment + m.getPrice();
+        }
+        //o1.getMenus() > THIS
+        //
+        //get all objects from the array list
+        // get the price from each menu and sum up
+        // after that calculate 21%  IVA > call method
         // sum value + IVA
-        // RETURN
+        //
+        // RETURN totalPayment
 
+        double totalPymentIVA =  calculateIVA(totalPyment);
+        this.setTotalPayment(totalPymentIVA);
 
-        return 0.0;
+        System.out.println(this);
+
+        return totalPymentIVA;
     }
 
-    public double calculateIVA(){
+    public double calculateIVA(double number){
 
-        // calculate the iva from the amount
+        number = number * 1.21;
 
-        return 0.0;
+        return number;
     }
 
 
