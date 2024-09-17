@@ -23,6 +23,8 @@ public class App
 
     public static void sandboxCreateObjects (){
 
+        RestauantDB r1 = new RestaurantDB(9;
+
         // create 5 tables
         Table t1 = new Table("Table 01", "Table type Modern", 4, false);
         Table t2 = new Table("Table 02", "Table type Modern", 2, false);
