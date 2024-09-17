@@ -3,6 +3,7 @@ package org.example;
 import org.example.model.Menu;
 import org.example.model.Order;
 import org.example.model.Table;
+import org.example.repository.RestaurantDB;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,6 +24,8 @@ public class App
 
     public static void sandboxCreateObjects (){
 
+
+        RestaurantDB r1 = new RestaurantDB();
         // create 5 tables
         Table t1 = new Table("Table 01", "Table type Modern", 4, false);
         Table t2 = new Table("Table 02", "Table type Modern", 2, false);
