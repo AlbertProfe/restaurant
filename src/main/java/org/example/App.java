@@ -51,15 +51,5 @@ public class App
         System.out.println(o1);
 
         System.out.println("");
-
-
-
-        //HashMap<String, Menu> menus = new HashMap<String, Menu>();
-
-        //menus.put("M101", m1);
-
-
     }
-
-
 }
