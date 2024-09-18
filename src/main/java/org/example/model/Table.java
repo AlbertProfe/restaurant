@@ -14,6 +14,4 @@ public class Table {
     private int qty;
     private boolean busy;
 
-
-
 }
