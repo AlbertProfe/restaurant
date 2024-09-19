@@ -7,6 +7,7 @@ import org.example.repository.RestaurantDB;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Scanner;
 
 public class Utilities {
 
@@ -68,21 +69,21 @@ public class Utilities {
     }
 
     public static void printStatusTable(RestaurantDB r1) {
-
+        // print available tables
         System.out.println("\n\nAvailable tables:\n");
+       // let s fake a busy table
         r1.getTables().get("TABLE-01").setBusy(true);
+        // iterate all tables from hashmap to check if they are available
         for ( Table t : r1.getTables().values() ){
-
             if(!t.isBusy()) {
                 System.out.println(t.getName());
             }
         }
-        //for each tables hash
-        // if table BUSY is available  PRINT
-        //
-
-
-
     }
 
+    public static String ask(Scanner scanner, String textToAsk) {
+
+        System.out.println(textToAsk);
+        return scanner.nextLine();
+    }
 }
