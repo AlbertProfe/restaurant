@@ -4,7 +4,6 @@ import org.example.model.Menu;
 import org.example.model.Order;
 import org.example.model.Table;
 import org.example.repository.RestaurantDB;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
@@ -37,48 +36,6 @@ public class Utilities {
         r1.getMenus().put("MENU-VEG", m2);
         r1.getMenus().put("MENU-KID", m3);
 
-    }
-
-    public static void testOrder(RestaurantDB r1){
-
-        ArrayList<Menu> m = new ArrayList<>();
-        m.add(r1.getMenus().get("MENU-NIG"));
-        m.add(r1.getMenus().get("MENU-NIG"));
-        m.add(r1.getMenus().get("MENU-VEG"));
-        m.add(r1.getMenus().get("MENU-KID"));
-
-        Order o1 = new Order(new Date(), "Jazz", 4,
-                0.0, false, r1.getTables().get("TABLE-01"), null);
-        o1.setMenus(m);
-
-        r1.getTables().get("TABLE-01").setBusy(true);
-
-        System.out.println("Total to pay:"+ o1.calculateTotalPayment());
-        System.out.println(o1);
-
-        o1.setPaid(true);
-
-        System.out.println(o1);
-        r1.getTables().get("TABLE-01").setBusy(false);
-
-        System.out.println("Table status (" +
-                r1.getTables().get("TABLE-01").getName() +
-                "):" + r1.getTables().get("TABLE-01").isBusy());
-
-
-    }
-
-    public static void printStatusTable(RestaurantDB r1) {
-        // print available tables
-        System.out.println("\n\nAvailable tables:\n");
-       // let s fake a busy table
-        r1.getTables().get("TABLE-01").setBusy(true);
-        // iterate all tables from hashmap to check if they are available
-        for ( Table t : r1.getTables().values() ){
-            if(!t.isBusy()) {
-                System.out.println(t.getName());
-            }
-        }
     }
 
     public static String ask(Scanner scanner, String textToAsk) {
