@@ -10,12 +10,4 @@ public class App
         MainController.start();
         System.out.println("\nFinish");
     }
-
-
-
-
-
-
-
-
 }

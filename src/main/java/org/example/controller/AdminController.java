@@ -2,7 +2,6 @@ package org.example.controller;
 
 import org.example.utils.Utilities;
 import org.example.view.MainDisplay;
-
 import java.util.Scanner;
 
 public class AdminController {
@@ -22,6 +21,8 @@ public class AdminController {
                 MenuController.start(scanner);
             } else if (option.equals("2")){
                 TableController.start(scanner);
+            } else if (option.equals("3")){
+                OrderController.start(scanner);
             } else {
                 System.out.println("Word unknown");
             }

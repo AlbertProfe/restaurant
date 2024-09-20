@@ -1,11 +1,8 @@
 package org.example.utils;
 
 import org.example.model.Menu;
-import org.example.model.Order;
 import org.example.model.Table;
 import org.example.repository.RestaurantDB;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.Scanner;
 
 public class Utilities {

@@ -3,7 +3,6 @@ package org.example.Manager;
 import org.example.model.Menu;
 import org.example.model.Order;
 import org.example.repository.RestaurantDB;
-
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -40,12 +39,20 @@ public class OrderManger {
 
     public static void payOrder(){
 
-        //todo
+        //to-do
         //hashMap orders from r1
         //filter by TODAY and NOT-PAY
-        //SELECT order form a loop: quit, opton and unkown
+        //SELECT order from a loop: quit, option and unknown
         //get total payment
         // isPaid to TRUE
 
+    }
+
+    public static boolean createOrder(RestaurantDB r1){
+
+
+
+
+        return false;
     }
 }
