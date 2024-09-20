@@ -29,7 +29,7 @@ public class MainController {
                 break;
             } else if (option.equals("1")){
                 //OrderManger.testOrder(r1);
-                OrderManger.createOrder(r1);
+                OrderManger.createOrder(scanner, r1);
             } else if (option.equals("2")){
                 TableManager.printAvailableTables(r1);
             } else if (option.equals("3")){

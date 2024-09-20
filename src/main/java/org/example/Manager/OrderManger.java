@@ -3,8 +3,11 @@ package org.example.Manager;
 import org.example.model.Menu;
 import org.example.model.Order;
 import org.example.repository.RestaurantDB;
+import org.example.utils.Utilities;
+
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Scanner;
 
 public class OrderManger {
 
@@ -48,9 +51,68 @@ public class OrderManger {
 
     }
 
-    public static boolean createOrder(RestaurantDB r1){
+    public static boolean createOrder(Scanner scanner, RestaurantDB r1){
+
+        // create object
+        Order order1 = new Order();
+
+        // create date
+        Date date = new Date();
+        order1.setDate(date);
+
+        // create waiter
+        String waiter = Utilities.ask(scanner, "Waiter? ");
+        order1.setWaiter(waiter);
+
+        // people qty
+        String qty = Utilities.ask(scanner, "People qty? ");
+        try{
+            int qtyInt = Integer.parseInt(qty);
+            order1.setPeopleQty(qtyInt);
+        }
+        catch (NumberFormatException ex){
+            ex.printStackTrace();
+        }
+
+        // create table
+        System.out.println("\nSelect table:");
+        System.out.println("0 - Take Away");
+
+        // FOR EACH with all tables
+        // and index to select
+
+        String tableSelection = Utilities.ask(scanner, "Table? ");
+
+        if (tableSelection.equals("0")) order1.setTable(null);
+        else
+            order1.setTable(r1.getTables().get(tableSelection));
 
 
+        // create menus
+        System.out.println("\nSelect menus:");
+        ArrayList<Menu> menus = new ArrayList();
+        while(true) {
+
+            //FOR EACH with all MENUS
+            //and index to select
+            //add OBJECT MENU to menus
+            break;
+        }
+        order1.setMenus(menus);
+
+
+        // total payment
+        double totalPayment = order1.calculateTotalPayment();
+        order1.setTotalPayment(totalPayment);
+
+        // create paid
+        order1.setPaid(false);
+
+        // saver order to repo
+        r1.getOrders().put("OR-001", order1);
+
+        System.out.println("\nOrder");
+        System.out.println(order1);
 
 
         return false;
