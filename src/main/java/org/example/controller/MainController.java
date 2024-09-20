@@ -1,7 +1,7 @@
 package org.example.controller;
 
-import org.example.Manager.OrderManger;
-import org.example.Manager.TableManager;
+import org.example.manager.OrderManger;
+import org.example.manager.TableManager;
 import org.example.repository.RestaurantDB;
 import org.example.utils.Utilities;
 import org.example.view.MainDisplay;

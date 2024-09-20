@@ -1,4 +1,4 @@
-package org.example.Manager;
+package org.example.manager;
 
 import org.example.model.Menu;
 

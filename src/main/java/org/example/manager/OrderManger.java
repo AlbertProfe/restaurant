@@ -1,4 +1,4 @@
-package org.example.Manager;
+package org.example.manager;
 
 import org.example.model.Menu;
 import org.example.model.Order;
@@ -77,10 +77,10 @@ public class OrderManger {
         // create table
         System.out.println("\nSelect table:");
         System.out.println("0 - Take Away");
-
-        // FOR EACH with all tables
-        // and index to select
-
+        r1.getTables().forEach((key, table) -> {
+            // if table is not busy if (table.getName() == false)
+            System.out.println( key + " - "+ table.getName());
+        });
         String tableSelection = Utilities.ask(scanner, "Table? ");
 
         if (tableSelection.equals("0")) order1.setTable(null);
@@ -93,10 +93,18 @@ public class OrderManger {
         ArrayList<Menu> menus = new ArrayList();
         while(true) {
 
-            //FOR EACH with all MENUS
-            //and index to select
-            //add OBJECT MENU to menus
-            break;
+            System.out.println("0 - Quit");
+            r1.getMenus().forEach((key, menu) -> {
+                // if menu is active
+                System.out.println( key + " - " + menu.getName());
+            });
+
+            String option = Utilities.ask(scanner, "Menu? ");
+            if (option.equals("0")){ break; }
+            else {
+                menus.add(r1.getMenus().get(option));
+            }
+
         }
         order1.setMenus(menus);
 
