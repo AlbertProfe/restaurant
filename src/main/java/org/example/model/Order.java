@@ -33,9 +33,10 @@ public class Order {
         //System.out.println(this);
         return totalPymentIVA;
     }
-
+    // calculate IVA with 21%
     public double calculateIVA(double number){
-        number = number * 1.21;
+        double iva = 0.21;
+        number = number * (1.0 + iva);
         return number;
     }
 
