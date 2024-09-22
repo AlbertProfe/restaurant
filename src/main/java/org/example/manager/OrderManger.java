@@ -7,6 +7,7 @@ import org.example.utils.Utilities;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
 import java.util.Scanner;
 
 public class OrderManger {
@@ -94,10 +95,12 @@ public class OrderManger {
         while(true) {
 
             System.out.println("0 - Quit");
-            r1.getMenus().forEach((key, menu) -> {
-                // if menu is active
-                System.out.println( key + " - " + menu.getName());
-            });
+            for (Map.Entry<String, Menu> entry : r1.getMenus().entrySet()) {
+                String key = entry.getKey();
+                Menu menu = entry.getValue();
+                // Imprimir el menú y su clave
+                System.out.println(key + " - " + menu.getName());
+            }
 
             String option = Utilities.ask(scanner, "Menu? ");
             if (option.equals("0")){ break; }
