@@ -108,10 +108,15 @@ public class OrderManger {
         // saver order to repo
         r1.getOrders().put("OR-001", order1);
 
+        // Assure order has been saved
+        // retrieve order from DB
+        Order orderCheck = r1.getOrders().get("OR-001");
+
         System.out.println("\nOrder");
         System.out.println(order1);
 
+        boolean ok = orderCheck.equals(order1);
 
-        return false;
+        return ok;
     }
 }
