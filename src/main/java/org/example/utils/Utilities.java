@@ -44,6 +44,18 @@ public class Utilities {
         return scanner.nextLine();
     }
 
+    public static int askInt(Scanner scanner, String textToAsk) {
+        try{
+            String input = ask(scanner,textToAsk);
+            int number = Integer.parseInt(input);
+            return number;
+        }
+        catch (NumberFormatException ex){
+            ex.printStackTrace();
+        }
+        return -1;
+    }
+
     public static void printMenus(RestaurantDB r1, boolean quitOption){
         System.out.println("\nSelect menu:");
         if (quitOption) System.out.println("0 - Quit");

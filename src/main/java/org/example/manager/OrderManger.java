@@ -65,14 +65,7 @@ public class OrderManger {
         order1.setWaiter(waiter);
 
         // people qty
-        String qty = Utilities.ask(scanner, "People qty? ");
-        try{
-            int qtyInt = Integer.parseInt(qty);
-            order1.setPeopleQty(qtyInt);
-        }
-        catch (NumberFormatException ex){
-            ex.printStackTrace();
-        }
+        int qtyInt = Utilities.askInt(scanner, "People qty? ");
 
         Utilities.printTables(r1);
         String tableSelection = Utilities.ask(scanner, "Table? ");
@@ -83,8 +76,7 @@ public class OrderManger {
 
 
         // create menus
-        System.out.println("\nSelect menus:");
-        ArrayList<Menu> menus = new ArrayList();
+        ArrayList<Menu> menus = new ArrayList<>();
         while(true) {
 
             Utilities.printMenus(r1,true);
@@ -95,6 +87,8 @@ public class OrderManger {
             }
 
         }
+
+        // check if menus is empty && repeat until is not empty
         order1.setMenus(menus);
 
 
@@ -118,7 +112,7 @@ public class OrderManger {
         boolean ok = orderCheck.equals(order1);
 
         if (ok && !tableSelection.equals("0")){
-            // if all was ok and is not a take away
+            // if all was ok and is not a takeaway
             order1.getTable().setBusy(true);
         }
 
