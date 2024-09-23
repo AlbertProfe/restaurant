@@ -74,13 +74,6 @@ public class OrderManger {
             ex.printStackTrace();
         }
 
-        // create table
-//        System.out.println("\nSelect table:");
-//        System.out.println("0 - Take Away");
-//        r1.getTables().forEach((key, table) -> {
-//            // if table is not busy if (table.getName() == false)
-//            System.out.println( key + " - "+ table.getName());
-//        });
         Utilities.printTables(r1);
         String tableSelection = Utilities.ask(scanner, "Table? ");
 
@@ -95,12 +88,6 @@ public class OrderManger {
         while(true) {
 
             Utilities.printMenus(r1,true);
-//            System.out.println("0 - Quit");
-//            r1.getMenus().forEach((key, menu) -> {
-//                // if menu is active
-//                System.out.println( key + " - " + menu.getName());
-//            });
-
             String option = Utilities.ask(scanner, "Menu? ");
             if (option.equals("0")){ break; }
             else {
