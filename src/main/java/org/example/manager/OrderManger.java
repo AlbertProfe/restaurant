@@ -117,6 +117,11 @@ public class OrderManger {
 
         boolean ok = orderCheck.equals(order1);
 
+        if (ok && !tableSelection.equals("0")){
+            // if all was ok and is not a take away
+            order1.getTable().setBusy(true);
+        }
+
         return ok;
     }
 }
