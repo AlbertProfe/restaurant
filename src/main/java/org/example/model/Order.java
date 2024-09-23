@@ -40,6 +40,7 @@ public class Order {
         return number;
     }
 
-
-
+    public Table getTable() {
+        return table;
+    }
 }
