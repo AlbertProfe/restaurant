@@ -3,6 +3,9 @@ package org.example.utils;
 import org.example.model.Menu;
 import org.example.model.Table;
 import org.example.repository.RestaurantDB;
+
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Utilities {
@@ -40,4 +43,24 @@ public class Utilities {
         System.out.println(textToAsk);
         return scanner.nextLine();
     }
+
+    public static void printMenus(RestaurantDB r1, boolean quitOption){
+        System.out.println("\nSelect menu:");
+        if (quitOption) System.out.println("0 - Quit");
+        r1.getMenus().forEach((key, menu) -> {
+            // if menu is active
+            System.out.println( key + " - " + menu.getName());
+        });
+
+    }
+
+    public static void printTables(RestaurantDB r1){
+        System.out.println("\nSelect table:");
+        System.out.println("0 - Take Away");
+        r1.getTables().forEach((key, table) -> {
+            // if table is not busy if (table.getName() == false)
+            System.out.println( key + " - "+ table.getName());
+        });
+    }
+
 }

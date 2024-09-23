@@ -75,12 +75,13 @@ public class OrderManger {
         }
 
         // create table
-        System.out.println("\nSelect table:");
-        System.out.println("0 - Take Away");
-        r1.getTables().forEach((key, table) -> {
-            // if table is not busy if (table.getName() == false)
-            System.out.println( key + " - "+ table.getName());
-        });
+//        System.out.println("\nSelect table:");
+//        System.out.println("0 - Take Away");
+//        r1.getTables().forEach((key, table) -> {
+//            // if table is not busy if (table.getName() == false)
+//            System.out.println( key + " - "+ table.getName());
+//        });
+        Utilities.printTables(r1);
         String tableSelection = Utilities.ask(scanner, "Table? ");
 
         if (tableSelection.equals("0")) order1.setTable(null);
@@ -93,11 +94,12 @@ public class OrderManger {
         ArrayList<Menu> menus = new ArrayList();
         while(true) {
 
-            System.out.println("0 - Quit");
-            r1.getMenus().forEach((key, menu) -> {
-                // if menu is active
-                System.out.println( key + " - " + menu.getName());
-            });
+            Utilities.printMenus(r1,true);
+//            System.out.println("0 - Quit");
+//            r1.getMenus().forEach((key, menu) -> {
+//                // if menu is active
+//                System.out.println( key + " - " + menu.getName());
+//            });
 
             String option = Utilities.ask(scanner, "Menu? ");
             if (option.equals("0")){ break; }
