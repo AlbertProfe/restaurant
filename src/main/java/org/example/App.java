@@ -12,12 +12,4 @@ public class App
         //Hola soy Marc
 
     }
-
-
-
-
-
-
-
-
 }
