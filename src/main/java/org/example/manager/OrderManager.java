@@ -5,11 +5,13 @@ import org.example.model.Order;
 import org.example.repository.RestaurantDB;
 import org.example.utils.Utilities;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
+import java.util.UUID;
 
-public class OrderManger {
+public class OrderManager {
 
     public static void testOrder(RestaurantDB r1){
 
@@ -53,6 +55,7 @@ public class OrderManger {
 
     public static boolean createOrder(Scanner scanner, RestaurantDB r1){
 
+        boolean statusOperation  = false;
         // create object
         Order order1 = new Order();
 
@@ -65,22 +68,22 @@ public class OrderManger {
         order1.setWaiter(waiter);
 
         // people qty
-        String qty = Utilities.ask(scanner, "People qty? ");
-        try{
-            int qtyInt = Integer.parseInt(qty);
-            order1.setPeopleQty(qtyInt);
-        }
-        catch (NumberFormatException ex){
-            ex.printStackTrace();
+        while (true) {
+            String qty = Utilities.ask(scanner, "People qty? ");
+            try {
+                int qtyInt = Integer.parseInt(qty);
+                order1.setPeopleQty(qtyInt);
+                break; // Exit the loop if input is valid
+            } catch (NumberFormatException ex) {
+                System.out.println("Invalid input. Please enter an integer.");
+            }
         }
 
         // create table
         System.out.println("\nSelect table:");
+
+        TableManager.printAvailableTables(r1);
         System.out.println("0 - Take Away");
-        r1.getTables().forEach((key, table) -> {
-            // if table is not busy if (table.getName() == false)
-            System.out.println( key + " - "+ table.getName());
-        });
         String tableSelection = Utilities.ask(scanner, "Table? ");
 
         if (tableSelection.equals("0")) order1.setTable(null);
@@ -116,13 +119,24 @@ public class OrderManger {
         // create paid
         order1.setPaid(false);
 
+
         // saver order to repo
-        r1.getOrders().put("OR-001", order1);
+        String uuid = UUID.randomUUID().toString();
+        r1.getOrders().put(uuid, order1);
+        Order orderSaved = r1.getOrders().get(uuid);
 
-        System.out.println("\nOrder");
-        System.out.println(order1);
+        if (orderSaved != null){
+            statusOperation = true;
 
+            System.out.println("\nOrder");
+            System.out.println("Order ID: " + uuid);
+            System.out.println(orderSaved);
 
-        return false;
+            r1.getTables().get(tableSelection).setBusy(true);
+            System.out.println(  "\nTable status BUSY(" +  r1.getTables().get(tableSelection).getName() + "):" + r1.getTables().get(tableSelection).isBusy());
+            //TableManager.printAvailableTables(r1);
+        }
+
+        return statusOperation;
     }
 }
