@@ -4,10 +4,11 @@ package org.example.manager;
 import org.example.model.Table;
 import org.example.repository.RestaurantDB;
 import java.util.List;
+import java.util.Map;
 
 public class TableManager {
 
-    public static void printAvailableTables(RestaurantDB r1) {
+    public static void printTestAvailableTables(RestaurantDB r1) {
         // print available tables
         System.out.println("\nAvailable tables:\n");
         // let s fake a busy table
@@ -19,6 +20,20 @@ public class TableManager {
                 System.out.println(i + " - " + t.getName());
                 i++;
             }
+        }
+    }
+
+    public static void printAvailableTables(RestaurantDB r1) {
+        System.out.println("\nAvailable tables:\n");
+
+        for (Map.Entry<String, Table> entry : r1.getTables().entrySet()) {
+            String key = entry.getKey();
+            Table table = entry.getValue();
+            if (!table.isBusy()) {
+                System.out.println(key + " - " + table.getName());
+            }
+
+
         }
     }
 
