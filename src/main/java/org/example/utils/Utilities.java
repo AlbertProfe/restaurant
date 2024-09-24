@@ -40,4 +40,20 @@ public class Utilities {
         System.out.println(textToAsk);
         return scanner.nextLine();
     }
+
+    public static int askForPositiveInteger(Scanner scanner, String textToAsk) {
+        while (true) {
+            String qty = Utilities.ask(scanner, textToAsk);
+            try {
+                int qtyInt = Integer.parseInt(qty);
+                if (qtyInt > 0) {
+                    return qtyInt;
+                } else {
+                    System.out.println("Please enter a positive integer.");
+                }
+            } catch (NumberFormatException ex) {
+                System.out.println("Invalid input. Please enter a positive integer.");
+            }
+        }
+    }
 }

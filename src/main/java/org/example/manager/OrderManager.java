@@ -2,12 +2,11 @@ package org.example.manager;
 
 import org.example.model.Menu;
 import org.example.model.Order;
+import org.example.model.Table;
 import org.example.repository.RestaurantDB;
 import org.example.utils.Utilities;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Scanner;
-import java.util.UUID;
+
+import java.util.*;
 
 public class OrderManager {
 
@@ -69,68 +68,25 @@ public class OrderManager {
         order1.setWaiter(waiter);
 
         // people qty
-        while (true) {
-            String qty = Utilities.ask(scanner, "People qty? ");
-            try {
-                int qtyInt = Integer.parseInt(qty);
-                order1.setPeopleQty(qtyInt);
-                break; // Exit the loop if input is valid
-            } catch (NumberFormatException ex) {
-                System.out.println("Invalid input. Please enter an integer.");
-            }
-        }
+        int qty = Utilities.askForPositiveInteger(scanner, "People qty? ");
+        order1.setPeopleQty(qty);
 
-        // create table
-        System.out.println("\nSelect table:");
+        // select table
+        Table table = selectTable(r1, scanner);
+        order1.setTable(table);
 
-        TableManager.printAvailableTables(r1);
-        System.out.println("0 - Take Away");
-        String tableSelection;
-
-        while (true) {
-            tableSelection = Utilities.ask(scanner, "Table? ");
-
-            if (tableSelection.equals("0")) {
-                order1.setTable(null);
-                break;
-            } else if (r1.getTables().containsKey(tableSelection)) {
-                order1.setTable(r1.getTables().get(tableSelection));
-                break;
-            } else {
-                System.out.println("Invalid table selection. Please try again.");
-            }
-        }
-
-        // create menus
-        System.out.println("\nSelect menus:");
-        ArrayList<Menu> menus = new ArrayList<>();
-        while (true) {
-            System.out.println("0 - Quit");
-            r1.getMenus().forEach((key, menu) -> {
-                // if menu is active
-                System.out.println(key + " - " + menu.getName());
-            });
-
-            String menuSelection = Utilities.ask(scanner, "Menu? ");
-            if (menuSelection.equals("0")) {
-                break;
-            } else if (r1.getMenus().containsKey(menuSelection)) {
-                menus.add(r1.getMenus().get(menuSelection));
-            } else {
-                System.out.println("Invalid menu selection. Please try again.");
-            }
-        }
+        // select menus
+        ArrayList<Menu> menus = selectMenus(r1, scanner);
         order1.setMenus(menus);
 
         // total payment
-        //double totalPayment = order1.calculateTotalPayment();
         double totalPayment = OrderManager.calculateTotalPayment(order1);
         order1.setTotalPayment(totalPayment);
 
         // create paid
         order1.setPaid(false);
 
-        // saver order to repo
+        // save order to repo
         String uuid = UUID.randomUUID().toString();
         r1.getOrders().put(uuid, order1);
         Order orderSaved = r1.getOrders().get(uuid);
@@ -143,9 +99,10 @@ public class OrderManager {
             System.out.println("Order ID: " + uuid);
             System.out.println(orderSaved);
 
-            r1.getTables().get(tableSelection).setBusy(true);
-            System.out.println(  "\nTable status BUSY (" +  r1.getTables().get(tableSelection).getName() + "):" + r1.getTables().get(tableSelection).isBusy());
-            //TableManager.printAvailableTables(r1);
+            if (table != null) {
+                table.setBusy(true);
+                System.out.println("\nTable status BUSY (" + table.getName() + "): " + table.isBusy());
+            }
         }
 
         return statusOperation;
@@ -171,5 +128,55 @@ public class OrderManager {
         double iva = 0.21;
         number = number * (1.0 + iva);
         return number;
+    }
+
+    // select table from r1 and return table or null
+    public static Table selectTable(RestaurantDB r1, Scanner scanner){
+        // select table
+        System.out.println("\nSelect table:");
+
+        TableManager.printAvailableTables(r1);
+        System.out.println("0 - Take Away");
+        String tableSelection;
+        Table table = null;
+
+        while (true) {
+            // ask for table selection or take away
+            tableSelection = Utilities.ask(scanner, "Table? ");
+            if (tableSelection.equals("0")) {
+                // no table, take away
+                break;
+            } else if (r1.getTables().containsKey(tableSelection)) {
+                // table exists
+                table = r1.getTables().get(tableSelection);
+                break;
+            } else {
+                System.out.println("Invalid table selection. Please try again.");
+            }
+        }
+        return table;
+    }
+
+    // select menus from r1 and return menus
+    public static ArrayList<Menu> selectMenus(RestaurantDB r1, Scanner scanner) {
+        System.out.println("\nSelect menus:");
+        ArrayList<Menu> menus = new ArrayList<>();
+        while (true) {
+            System.out.println("0 - Quit");
+            r1.getMenus().forEach((key, menu) -> {
+                // if menu is active
+                System.out.println(key + " - " + menu.getName());
+            });
+
+            String menuSelection = Utilities.ask(scanner, "Menu? ");
+            if (menuSelection.equals("0")) {
+                break;
+            } else if (r1.getMenus().containsKey(menuSelection)) {
+                menus.add(r1.getMenus().get(menuSelection));
+            } else {
+                System.out.println("Invalid menu selection. Please try again.");
+            }
+        }
+        return menus;
     }
 }
