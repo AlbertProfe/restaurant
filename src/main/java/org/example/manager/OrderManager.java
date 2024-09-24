@@ -4,8 +4,6 @@ import org.example.model.Menu;
 import org.example.model.Order;
 import org.example.repository.RestaurantDB;
 import org.example.utils.Utilities;
-
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
@@ -13,6 +11,7 @@ import java.util.UUID;
 
 public class OrderManager {
 
+    // test order from r1
     public static void testOrder(RestaurantDB r1){
 
         ArrayList<Menu> m = new ArrayList<>();
@@ -27,7 +26,7 @@ public class OrderManager {
 
         r1.getTables().get("TABLE-01").setBusy(true);
 
-        System.out.println("Total to pay:"+ o1.calculateTotalPayment());
+        System.out.println("Total to pay:"+ calculateTotalPayment(o1));
         System.out.println(o1);
 
         o1.setPaid(true);
@@ -42,6 +41,7 @@ public class OrderManager {
 
     }
 
+    // pay order from r1
     public static void payOrder(){
 
         //to-do
@@ -53,6 +53,7 @@ public class OrderManager {
 
     }
 
+    // create order with menus and tables from r1
     public static boolean createOrder(Scanner scanner, RestaurantDB r1){
 
         boolean statusOperation  = false;
@@ -84,47 +85,57 @@ public class OrderManager {
 
         TableManager.printAvailableTables(r1);
         System.out.println("0 - Take Away");
-        String tableSelection = Utilities.ask(scanner, "Table? ");
+        String tableSelection;
 
-        if (tableSelection.equals("0")) order1.setTable(null);
-        else
-            order1.setTable(r1.getTables().get(tableSelection));
+        while (true) {
+            tableSelection = Utilities.ask(scanner, "Table? ");
 
+            if (tableSelection.equals("0")) {
+                order1.setTable(null);
+                break;
+            } else if (r1.getTables().containsKey(tableSelection)) {
+                order1.setTable(r1.getTables().get(tableSelection));
+                break;
+            } else {
+                System.out.println("Invalid table selection. Please try again.");
+            }
+        }
 
         // create menus
         System.out.println("\nSelect menus:");
-        ArrayList<Menu> menus = new ArrayList();
-        while(true) {
-
+        ArrayList<Menu> menus = new ArrayList<>();
+        while (true) {
             System.out.println("0 - Quit");
             r1.getMenus().forEach((key, menu) -> {
                 // if menu is active
-                System.out.println( key + " - " + menu.getName());
+                System.out.println(key + " - " + menu.getName());
             });
 
-            String option = Utilities.ask(scanner, "Menu? ");
-            if (option.equals("0")){ break; }
-            else {
-                menus.add(r1.getMenus().get(option));
+            String menuSelection = Utilities.ask(scanner, "Menu? ");
+            if (menuSelection.equals("0")) {
+                break;
+            } else if (r1.getMenus().containsKey(menuSelection)) {
+                menus.add(r1.getMenus().get(menuSelection));
+            } else {
+                System.out.println("Invalid menu selection. Please try again.");
             }
-
         }
         order1.setMenus(menus);
 
-
         // total payment
-        double totalPayment = order1.calculateTotalPayment();
+        //double totalPayment = order1.calculateTotalPayment();
+        double totalPayment = OrderManager.calculateTotalPayment(order1);
         order1.setTotalPayment(totalPayment);
 
         // create paid
         order1.setPaid(false);
-
 
         // saver order to repo
         String uuid = UUID.randomUUID().toString();
         r1.getOrders().put(uuid, order1);
         Order orderSaved = r1.getOrders().get(uuid);
 
+        // if order is saved print and update table
         if (orderSaved != null){
             statusOperation = true;
 
@@ -133,10 +144,32 @@ public class OrderManager {
             System.out.println(orderSaved);
 
             r1.getTables().get(tableSelection).setBusy(true);
-            System.out.println(  "\nTable status BUSY(" +  r1.getTables().get(tableSelection).getName() + "):" + r1.getTables().get(tableSelection).isBusy());
+            System.out.println(  "\nTable status BUSY (" +  r1.getTables().get(tableSelection).getName() + "):" + r1.getTables().get(tableSelection).isBusy());
             //TableManager.printAvailableTables(r1);
         }
 
         return statusOperation;
+    }
+
+    //Calculate the amount to pay with IVA
+    public static double calculateTotalPayment (Order order){
+
+        double totalPyment = 0.0;
+        for (Menu m : order.getMenus()) {
+            totalPyment = totalPyment + m.getPrice();
+        }
+
+        double totalPymentIVA =  calculateIVA(totalPyment);
+        order.setTotalPayment(totalPymentIVA);
+
+        //System.out.println(this);
+        return totalPymentIVA;
+    }
+
+    // calculate IVA with 21%
+    public static double calculateIVA(double number){
+        double iva = 0.21;
+        number = number * (1.0 + iva);
+        return number;
     }
 }
