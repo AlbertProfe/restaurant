@@ -23,5 +23,18 @@ public class Order {
 
 
 
+    @Override
+    public String toString() {
+        return
+                "date: " + date + "\n"  +
+                "waiter: " + waiter + '\'' + "\n"  +
+                "peopleQty: " + peopleQty +"\n"  +
+                "totalPayment: " + totalPayment +" euros\n"  +
+                "paid: " + paid +"\n"  +
+                "table: " + table +"\n"  +
+                "Menus quantity: " + menus.size() +"\n"  +
+                "menus: " + menus
+                ;
+    }
 
 }

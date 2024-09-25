@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
-public class OrderManger {
+public class OrderManager {
 
     public static void testOrder(RestaurantDB r1){
 
