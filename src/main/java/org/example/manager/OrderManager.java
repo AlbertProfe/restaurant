@@ -144,4 +144,8 @@ public class OrderManager {
 
         return null;
     }
+
+    public static ArrayList<Menu> selectMenus (RestaurantDB r1, Scanner scanner) {
+        return null;
+    }
 }
