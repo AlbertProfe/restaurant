@@ -2,10 +2,9 @@ package org.example.manager;
 
 import org.example.model.Menu;
 import org.example.model.Order;
+import org.example.model.Table;
 import org.example.repository.RestaurantDB;
 import org.example.utils.Utilities;
-
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
@@ -138,5 +137,11 @@ public class OrderManager {
         }
 
         return statusOperation;
+    }
+
+
+    public static Table selectTable (RestaurantDB r1, Scanner scanner) {
+
+        return null;
     }
 }
