@@ -58,15 +58,17 @@ public class OrderManager {
         // create object
         Order order1 = new Order();
 
-        // create date
-        Date date = new Date();
-        order1.setDate(date);
+        order1.setDate(new Date());
 
         // create waiter
-        String waiter = Utilities.ask(scanner, "Waiter? ");
-        order1.setWaiter(waiter);
+        //String waiter = Utilities.ask(scanner, "Waiter? ");
+        //order1.setWaiter(waiter);
 
-        // people qty
+        // create waiter
+
+        order1.setWaiter(Utilities.ask(scanner, "Waiter? "));
+
+   /*     // people qty
         while (true) {
             String qty = Utilities.ask(scanner, "People qty? ");
             try {
@@ -76,10 +78,14 @@ public class OrderManager {
             } catch (NumberFormatException ex) {
                 System.out.println("Invalid input. Please enter an integer.");
             }
-        }
+        }*/
+
+        order1.setPeopleQty(qtyPeople(scanner));
+
 
         // create table
-        System.out.println("\nSelect table:");
+        order1.setTable(selectTable(r1, scanner));
+        /*System.out.println("\nSelect table:");
 
         TableManager.printAvailableTables(r1);
         System.out.println("0 - Take Away");
@@ -87,11 +93,11 @@ public class OrderManager {
 
         if (tableSelection.equals("0")) order1.setTable(null);
         else
-            order1.setTable(r1.getTables().get(tableSelection));
+            order1.setTable(r1.getTables().get(tableSelection));*/
 
 
         // create menus
-        System.out.println("\nSelect menus:");
+       /* System.out.println("\nSelect menus:");
         ArrayList<Menu> menus = new ArrayList();
         while(true) {
 
@@ -107,13 +113,12 @@ public class OrderManager {
                 menus.add(r1.getMenus().get(option));
             }
 
-        }
-        order1.setMenus(menus);
+        }*/
+        order1.setMenus(selectMenus(r1, scanner));
 
 
         // total payment
-        double totalPayment = order1.calculateTotalPayment();
-        order1.setTotalPayment(totalPayment);
+        order1.setTotalPayment(order1.calculateTotalPayment());
 
         // create paid
         order1.setPaid(false);
@@ -131,21 +136,65 @@ public class OrderManager {
             System.out.println("Order ID: " + uuid);
             System.out.println(orderSaved);
 
-            r1.getTables().get(tableSelection).setBusy(true);
-            System.out.println(  "\nTable status BUSY(" +  r1.getTables().get(tableSelection).getName() + "):" + r1.getTables().get(tableSelection).isBusy());
+            //r1.getTables().get(tableSelection).setBusy(true);
+            //System.out.println(  "\nTable status BUSY(" +  r1.getTables().get(tableSelection).getName() + "):" + r1.getTables().get(tableSelection).isBusy());
             //TableManager.printAvailableTables(r1);
         }
 
         return statusOperation;
     }
 
-
     public static Table selectTable (RestaurantDB r1, Scanner scanner) {
+        System.out.println("\nSelect table:");
 
-        return null;
+        TableManager.printAvailableTables(r1);
+        System.out.println("0 - Take Away");
+        String tableSelection = Utilities.ask(scanner, "Table? ");
+
+        if (tableSelection.equals("0")) {return null;}
+        else { return r1.getTables().get(tableSelection);}
+
     }
 
     public static ArrayList<Menu> selectMenus (RestaurantDB r1, Scanner scanner) {
-        return null;
+
+        System.out.println("\nSelect menus:");
+        ArrayList<Menu> menus = new ArrayList();
+        while(true) {
+
+            System.out.println("0 - Quit");
+            r1.getMenus().forEach((key, menu) -> {
+                // if menu is active
+                System.out.println( key + " - " + menu.getName());
+            });
+
+            String option = Utilities.ask(scanner, "Menu? ");
+            if (option.equals("0")){  break; }
+            else {
+                menus.add(r1.getMenus().get(option));
+            }
+
+        }
+
+
+        return menus;
     }
+
+    public static int qtyPeople (Scanner scanner) {
+
+        // people qty
+        while (true) {
+            String qty = Utilities.ask(scanner, "People qty? ");
+            try {
+                int qtyInt = Integer.parseInt(qty);
+                return qtyInt;
+
+            } catch (NumberFormatException ex) {
+                System.out.println("Invalid input. Please enter an integer.");
+            }
+        }
+
+
+    }
+
 }
