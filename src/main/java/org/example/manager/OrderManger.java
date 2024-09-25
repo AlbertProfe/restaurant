@@ -2,6 +2,7 @@ package org.example.manager;
 
 import org.example.model.Menu;
 import org.example.model.Order;
+import org.example.model.Table;
 import org.example.repository.RestaurantDB;
 import org.example.utils.Utilities;
 
@@ -25,7 +26,7 @@ public class OrderManger {
 
         r1.getTables().get("TABLE-01").setBusy(true);
 
-        System.out.println("Total to pay:"+ o1.calculateTotalPayment());
+        System.out.println("Total to pay:"+ calculateTotalPayment(o1));
         System.out.println(o1);
 
         o1.setPaid(true);
@@ -52,77 +53,140 @@ public class OrderManger {
     }
 
     public static boolean createOrder(Scanner scanner, RestaurantDB r1){
-
         // create object
         Order order1 = new Order();
-
         // create date
-        Date date = new Date();
-        order1.setDate(date);
-
+        order1.setDate(new Date());
         // create waiter
-        String waiter = Utilities.ask(scanner, "Waiter? ");
-        order1.setWaiter(waiter);
-
+        order1.setWaiter(Utilities.ask(scanner, "Waiter? ").toUpperCase());
         // people qty
-        String qty = Utilities.ask(scanner, "People qty? ");
-        try{
-            int qtyInt = Integer.parseInt(qty);
-            order1.setPeopleQty(qtyInt);
-        }
-        catch (NumberFormatException ex){
-            ex.printStackTrace();
-        }
-
-        // create table
-        System.out.println("\nSelect table:");
-        System.out.println("0 - Take Away");
-        r1.getTables().forEach((key, table) -> {
-            // if table is not busy if (table.getName() == false)
-            System.out.println( key + " - "+ table.getName());
-        });
-        String tableSelection = Utilities.ask(scanner, "Table? ");
-
-        if (tableSelection.equals("0")) order1.setTable(null);
-        else
-            order1.setTable(r1.getTables().get(tableSelection));
-
-
+        order1.setPeopleQty(peopleQtyInput(scanner));
+        // table selection
+        order1.setTable(tableSelection(scanner, r1));
         // create menus
-        System.out.println("\nSelect menus:");
-        ArrayList<Menu> menus = new ArrayList();
-        while(true) {
-
-            System.out.println("0 - Quit");
-            r1.getMenus().forEach((key, menu) -> {
-                // if menu is active
-                System.out.println( key + " - " + menu.getName());
-            });
-
-            String option = Utilities.ask(scanner, "Menu? ");
-            if (option.equals("0")){ break; }
-            else {
-                menus.add(r1.getMenus().get(option));
-            }
-
-        }
-        order1.setMenus(menus);
-
-
+        order1.setMenus(menuSelection(scanner, r1));
         // total payment
-        double totalPayment = order1.calculateTotalPayment();
-        order1.setTotalPayment(totalPayment);
-
-        // create paid
-        order1.setPaid(false);
-
-        // saver order to repo
+        order1.setTotalPayment(calculateTotalPayment(order1));
+        // setPaid
+        order1.setPaid(isPaid(scanner));
+        // saver order to repo TODO
         r1.getOrders().put("OR-001", order1);
-
         System.out.println("\nOrder");
         System.out.println(order1);
-
+        System.out.println("Order saved");
 
         return false;
+    }
+    private static int peopleQtyInput(Scanner scanner) {
+        boolean inputOk = false;
+        int peopleQty = 0;
+        while (!inputOk) {
+            String qty = Utilities.ask(scanner, "People qty? ");
+            // while qty is not a number
+            try {
+                peopleQty = Integer.parseInt(qty);
+                if (peopleQty < 20 && peopleQty > 0) {
+                    inputOk = true;
+                }else{
+                    System.out.println("Please enter a number between 1 and 20");
+                }
+            } catch (NumberFormatException ex) {
+                System.out.println("Please enter a number");
+            }
+        }
+        return peopleQty;
+    }
+    private static Table tableSelection(Scanner scanner, RestaurantDB r1) {
+        Table tableSelected = null;
+        System.out.println("\nSelect table:");
+        System.out.println("0 - Take Away");
+
+        for (String tableKey : r1.getTables().keySet()) {
+            Table t = r1.getTables().get(tableKey);
+            if (!t.isBusy()) {
+                String tableNumber = tableKey.replace("TABLE-0", "");
+                System.out.println(tableNumber + " - " + t.getName());
+            }
+        }
+        try {
+            int tableSelectionNum = Integer.parseInt(Utilities.ask(scanner, "Table? "));
+
+            if (tableSelectionNum == 0) {
+                tableSelected = null;
+            } else {
+                String tableKey = "TABLE-0" + tableSelectionNum;
+                tableSelected = r1.getTables().getOrDefault(tableKey, null);
+
+                if (tableSelected == null) {
+                    System.out.println("Invalid table number.");
+                }
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please enter a valid number.");
+        }
+        tableSelected.setBusy(true);
+
+        return tableSelected;
+    }
+    private static ArrayList<Menu> menuSelection(Scanner scanner, RestaurantDB r1) {
+        ArrayList<Menu> menus = new ArrayList<>();
+        while (true) {
+            System.out.println("\nSelect menu:");
+            boolean found = false;
+            System.out.println("0 - Finish");
+
+            for (String fullMenuKey : r1.getMenus().keySet()) {
+                String menuLetter = fullMenuKey.replace("MENU-", "").substring(0, 1).toUpperCase();
+                System.out.println(menuLetter + " - " + fullMenuKey + " - " + r1.getMenus().get(fullMenuKey).getName());
+            }
+
+            String menuSelection = Utilities.ask(scanner, "Menu? (ENTER THE LETTER OR 0)").toUpperCase();
+
+            if (menuSelection.equals("0")) {
+                break;
+            }
+
+            for (String fullMenuKey : r1.getMenus().keySet()) {
+                if (fullMenuKey.replace("MENU-", "").toUpperCase().startsWith(menuSelection)) {
+                    Menu menu = r1.getMenus().get(fullMenuKey);
+                    menus.add(menu);
+                    System.out.println(menu.getName() + " added to your selection.");
+                    found = true;
+                }
+            }
+            if (!found) {
+                System.out.println("Invalid menu selection. Please try again.");
+            }
+        }
+        return menus;
+    }
+    private static double calculateTotalPayment(Order order1){
+
+        double totalPyment = 0.0;
+        for (Menu m : order1.getMenus()) {
+            totalPyment = totalPyment + m.getPrice();
+        }
+
+        double totalPymentIVA =  calculateIVA(totalPyment);
+        order1.setTotalPayment(totalPymentIVA);
+
+        //System.out.println(this);
+        return totalPymentIVA;
+    }
+    private static double calculateIVA(double number){  //Calculate IVA 21%
+        double iva = 0.21;
+        number = number * (1.0 + iva);
+        return number;
+    }
+    private static boolean isPaid(Scanner scanner){
+        System.out.println("Is paid?");
+        System.out.println("1 - Yes");
+        System.out.println("2 - No");
+        int option = Integer.parseInt(Utilities.ask(scanner, "Option? "));
+        if(option == 1){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

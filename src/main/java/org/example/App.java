@@ -9,8 +9,5 @@ public class App
         System.out.println("\nInit\n");
         MainController.start();
         System.out.println("\nFinish");
-        //Hola soy Marc
-        System.out.println("asdaf");
-
     }
 }
