@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class OrderManager {
-
     public static void testOrder(RestaurantDB r1){
 
         ArrayList<Menu> m = new ArrayList<>();
