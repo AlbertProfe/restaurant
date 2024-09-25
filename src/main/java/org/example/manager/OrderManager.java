@@ -9,6 +9,7 @@ import org.example.utils.Utilities;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
+import java.util.UUID;
 
 public class OrderManager {
     public static void testOrder(RestaurantDB r1){
@@ -68,13 +69,15 @@ public class OrderManager {
         order1.setTotalPayment(calculateTotalPayment(order1));
         // setPaid
         order1.setPaid(isPaid(scanner));
-        // saver order to repo TODO
-        r1.getOrders().put("OR-001", order1);
-        System.out.println("\nOrder");
-        System.out.println(order1);
-        System.out.println("Order saved");
-
-        return false;
+        // saver order to repo
+        boolean orderIsSaved = saveOrder(order1, r1);
+        if(!orderIsSaved){
+            System.out.println("The order is not saved properly.");
+            return false;
+        }else{
+            System.out.println(printTicket(order1));
+            return true;
+        }
     }
     private static int peopleQtyInput(Scanner scanner) {
         boolean inputOk = false;
@@ -187,5 +190,28 @@ public class OrderManager {
         }else{
             return false;
         }
+    }
+    private static boolean saveOrder(Order order, RestaurantDB r1){
+        String uuid = UUID.randomUUID().toString();
+        r1.getOrders().put(uuid, order);
+        System.out.println("Order saved with id: "+ uuid);
+        if(r1.getOrders().containsKey(uuid)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    private static String printTicket(Order order1){
+        String ticket = "";
+        ticket = ticket + "Waiter: " + order1.getWaiter() + "\n";
+        ticket = ticket + "Date: " + order1.getDate() + "\n";
+        ticket = ticket + "Table: " + order1.getTable().getName() + " - Busy: " + order1.getTable().isBusy() + "\n";
+        ticket = ticket + "People Qty: " + order1.getPeopleQty() + "\n";
+        ticket = ticket + "Menus: " + "\n";
+        for (Menu m : order1.getMenus()) {
+            ticket = ticket + m.getName() + " - " + m.getPrice() + "\n";
+        }
+        ticket = ticket + "Total payment: " + order1.getTotalPayment();
+        return ticket;
     }
 }
