@@ -58,7 +58,7 @@ class CreateOrderTest {
     @Test
     void testCreateOrderSuccessful() {
         // Arrange
-        when(scanner.nextLine()).thenReturn( "Joan", "2", "TABLE-01", "MENU-NIG", "MENU-NIG", "MENU-NIG", "0");
+        when(scanner.nextLine()).thenReturn("Joan", "2", "TABLE-01", "0", "MENU-NIG", "MENU-NIG", "0");
 
         // Act
         boolean result = OrderManager.createOrder(scanner, restaurantDB);
@@ -70,24 +70,24 @@ class CreateOrderTest {
     }
 
     @Test
-    void testCreateOrderFilled() {
+    void testCreateOrderMultipleTables() {
         // Arrange
-        when(scanner.nextLine()).thenReturn("Joan", "2", "TABLE-01", "MENU-NIG", "MENU-NIG", "MENU-NIG", "0");
+        when(scanner.nextLine()).thenReturn("Joan", "4", "TABLE-01", "TABLE-02", "0", "MENU-NIG", "MENU-NIG", "MENU-VEG", "MENU-VEG", "0");
 
         // Act
         boolean result = OrderManager.createOrder(scanner, restaurantDB);
 
         // Assert
         assertTrue(result);
-        //assertEquals(2, restaurantDB.getOrders().size());
-        assertNotEquals(2, restaurantDB.getOrders().size());
+        assertEquals(1, restaurantDB.getOrders().size());
         assertTrue(restaurantDB.getTables().get("TABLE-01").isBusy());
+        assertTrue(restaurantDB.getTables().get("TABLE-02").isBusy());
     }
 
     @Test
     void testCreateOrderInvalidPeopleQuantity() {
         // Arrange
-        when(scanner.nextLine()).thenReturn("Joan", "-1", "2", "TABLE-02", "MENU-VEG", "0");
+        when(scanner.nextLine()).thenReturn("Joan", "-1", "2", "TABLE-02", "0", "MENU-VEG", "0");
 
         // Act
         boolean result = OrderManager.createOrder(scanner, restaurantDB);
@@ -98,11 +98,8 @@ class CreateOrderTest {
         assertTrue(restaurantDB.getTables().get("TABLE-02").isBusy());
     }
 
-    // be careful with this test there is an infinite loop
-    // because the user case is not valid
-    // since there are any table to select
     @Test
-    void testCreateOrderNoTableAvailable_InfiniteLoop() {
+    void testCreateOrderNoTableAvailable() {
         // Arrange
         when(scanner.nextLine()).thenReturn("Joan", "2");
         // Set all tables as busy
@@ -176,6 +173,28 @@ class CreateOrderTest {
         assertEquals(121.0, result, 0.01); // 100 * 1.21 = 121
     }
 
+    @Test
+    void testCheckAvailableTables() {
+        // Arrange
+        // All tables are available by default after setUp()
 
+        // Act
+        int result = OrderManager.checkAvailableTables(restaurantDB);
 
+        // Assert
+        assertEquals(5, result);
+    }
+
+    @Test
+    void testCheckAvailableTablesWithSomeBusy() {
+        // Arrange
+        restaurantDB.getTables().get("TABLE-01").setBusy(true);
+        restaurantDB.getTables().get("TABLE-03").setBusy(true);
+
+        // Act
+        int result = OrderManager.checkAvailableTables(restaurantDB);
+
+        // Assert
+        assertEquals(3, result);
+    }
 }

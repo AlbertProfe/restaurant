@@ -16,7 +16,7 @@ public class Order {
     private int peopleQty;
     private double totalPayment;
     private boolean paid;
-    private Table table;
+    private ArrayList<Table> tables;
     private ArrayList<Menu> menus;
 
     @Override
@@ -27,7 +27,8 @@ public class Order {
                 "peopleQty: " + peopleQty +"\n"  +
                 "totalPayment: " + totalPayment +" euros\n"  +
                 "paid: " + paid +"\n"  +
-                "table: " + table +"\n"  +
+                "Tables quantity: " + tables.size() +"\n"  +
+                "table: " + tables +"\n"  +
                 "Menus quantity: " + menus.size() +"\n"  +
                 "menus: " + menus
                 ;
