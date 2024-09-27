@@ -5,7 +5,6 @@ import org.example.model.Order;
 import org.example.model.Table;
 import org.example.repository.RestaurantDB;
 import org.example.utils.Utilities;
-
 import java.util.*;
 
 public class OrderManager {
@@ -72,8 +71,14 @@ public class OrderManager {
         order1.setPeopleQty(qty);
 
         // select table
-        Table table = selectTable(r1, scanner);
-        order1.setTable(table);
+        Table table = null;
+        if (r1.getTables().isEmpty()) {
+            System.out.println("There are no tables available.");
+            return statusOperation;
+        }  else {
+            table = selectTable(r1, scanner);
+            order1.setTable(table);
+        }
 
         // select menus
         ArrayList<Menu> menus = selectMenus(r1, scanner);
