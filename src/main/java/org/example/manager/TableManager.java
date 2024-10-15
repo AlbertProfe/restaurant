@@ -1,6 +1,5 @@
 package org.example.manager;
 
-
 import org.example.model.Table;
 import org.example.repository.RestaurantDB;
 import java.util.List;
@@ -58,4 +57,62 @@ public class TableManager {
         //todo
         return null;
     }
+
+
+/*    public static void deleteAll() {
+        restaurantDB.getTables().clear();
+        System.out.println("All tables have been deleted.");
+    }
+
+    public static void createTable(String name, String description, int capacity) {
+        String tableId = "TABLE-" + UUID.randomUUID().toString().substring(0, 8);
+        Table newTable = new Table(name, description, capacity, false);
+        restaurantDB.getTables().put(tableId, newTable);
+        System.out.println("New table created with ID: " + tableId);
+    }
+
+    public static void updateTable(String tableId, String name, String description, int capacity, boolean isBusy) {
+        Table table = restaurantDB.getTables().get(tableId);
+        if (table != null) {
+            table.setName(name);
+            table.setDescription(description);
+            table.setCapacity(capacity);
+            table.setBusy(isBusy);
+            System.out.println("Table updated: " + tableId);
+        } else {
+            System.out.println("Table not found: " + tableId);
+        }
+    }
+
+    public static List<Table> getAllTables() {
+        return new ArrayList<>(restaurantDB.getTables().values());
+    }
+
+    public static Table getOneTable(String id) {
+        return restaurantDB.getTables().get(id);
+    }
+
+    // Additional utility methods
+
+    public static void printAllTables() {
+        System.out.println("\nAll tables:");
+        for (Map.Entry<String, Table> entry : restaurantDB.getTables().entrySet()) {
+            System.out.println(entry.getKey() + " - " + entry.getValue());
+        }
+    }
+
+    public static boolean isTableAvailable(String tableId) {
+        Table table = restaurantDB.getTables().get(tableId);
+        return table != null && !table.isBusy();
+    }
+
+    public static void setTableBusy(String tableId, boolean isBusy) {
+        Table table = restaurantDB.getTables().get(tableId);
+        if (table != null) {
+            table.setBusy(isBusy);
+            System.out.println("Table " + tableId + " is now " + (isBusy ? "busy" : "available"));
+        } else {
+            System.out.println("Table not found: " + tableId);
+        }
+    }*/
 }

@@ -5,13 +5,12 @@ import org.example.model.Order;
 import org.example.model.Table;
 import org.example.repository.RestaurantDB;
 import org.example.utils.Utilities;
-
 import java.util.*;
 
 public class OrderManager {
 
     // test order from r1
-    public static void testOrder(RestaurantDB r1){
+    /*public static void testOrder(RestaurantDB r1){
 
         ArrayList<Menu> m = new ArrayList<>();
         m.add(r1.getMenus().get("MENU-NIG"));
@@ -38,7 +37,7 @@ public class OrderManager {
                 "):" + r1.getTables().get("TABLE-01").isBusy());
 
 
-    }
+    }*/
 
     // pay order from r1
     public static void payOrder(){
@@ -71,9 +70,15 @@ public class OrderManager {
         int qty = Utilities.askForPositiveInteger(scanner, "People qty? ");
         order1.setPeopleQty(qty);
 
-        // select table
-        Table table = selectTable(r1, scanner);
-        order1.setTable(table);
+        // select tables
+        int availableTables = OrderManager.checkAvailableTables(r1);
+        if (availableTables > 0) {
+            ArrayList<Table> tables = selectTables(r1, scanner);
+            order1.setTables(tables);
+        } else {
+            System.out.println("Sorry, we're fully booked at the moment. Do you want to book a table?");
+        }
+
 
         // select menus
         ArrayList<Menu> menus = selectMenus(r1, scanner);
@@ -98,11 +103,12 @@ public class OrderManager {
             System.out.println("\nOrder");
             System.out.println("Order ID: " + uuid);
             System.out.println(orderSaved);
+            System.out.println("");
+            order1.getTables().forEach((table) -> {
+                System.out.print("Table: " + table.getName() + " - ");
+                System.out.println("BUSY Status: " + table.isBusy());
+            });
 
-            if (table != null) {
-                table.setBusy(true);
-                System.out.println("\nTable status BUSY (" + table.getName() + "): " + table.isBusy());
-            }
         }
 
         return statusOperation;
@@ -131,7 +137,7 @@ public class OrderManager {
     }
 
     // select table from r1 and return table or null
-    public static Table selectTable(RestaurantDB r1, Scanner scanner){
+    /*public static Table selectTable(RestaurantDB r1, Scanner scanner){
         // select table
         System.out.println("\nSelect table:");
 
@@ -155,6 +161,30 @@ public class OrderManager {
             }
         }
         return table;
+    }*/
+
+    // select table from r1 and return table or null
+    public static ArrayList<Table> selectTables(RestaurantDB r1, Scanner scanner) {
+        System.out.println("\nSelect tables:");
+        ArrayList<Table> tables = new ArrayList<>();
+        while (true) {
+            System.out.println("0 - Quit");
+            r1.getTables().forEach((key, table) -> {
+                // if menu is active
+                System.out.println(key + " - " + table.getName());
+            });
+
+            String tableSelection = Utilities.ask(scanner, "Table? ");
+            if (tableSelection.equals("0")) {
+                break;
+            } else if (r1.getTables().containsKey(tableSelection)) {
+                tables.add(r1.getTables().get(tableSelection));
+                r1.getTables().get(tableSelection).setBusy(true);
+            } else {
+                System.out.println("Invalid table selection. Please try again.");
+            }
+        }
+        return tables;
     }
 
     // select menus from r1 and return menus
@@ -178,5 +208,19 @@ public class OrderManager {
             }
         }
         return menus;
+    }
+
+    // check available tables in r1 and return count
+    public static int checkAvailableTables(RestaurantDB r1) {
+        int availableCount = 0;
+
+        for (Table table : r1.getTables().values()) {
+            if (!table.isBusy()) {
+                availableCount++;
+            }
+        }
+
+        System.out.println("Number of available tables: " + availableCount);
+        return availableCount;
     }
 }
